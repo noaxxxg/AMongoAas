@@ -1,6 +1,5 @@
-from src.rdbms.create_tables import Deployment
 from src.functualities import deployments
-from fastapi import APIRouter
+from fastapi import APIRouter, status
 from typing import Annotated
 from fastapi import Body, Header
 
@@ -8,7 +7,7 @@ from fastapi import Body, Header
 router = APIRouter(prefix="/deployments")
 
 
-@router.post("")
+@router.post("", status_code=status.HTTP_201_CREATED)
 def create_deployment(db_name: Annotated[str, Body()], username: Annotated[str, Body()]):
     return deployments.create_deployment(db_name, username)
 
@@ -23,7 +22,7 @@ def rename(deployment_id: str, db_name: Annotated[str, Body()]):
     return deployments.rename(deployment_id, db_name)
 
 
-@router.delete("/")
+@router.delete("/", status_code=status.HTTP_204_NO_CONTENT)
 def delete(deployment_id: str, username: Annotated[str, Header()]):
     return deployments.delete(deployment_id, username)
 

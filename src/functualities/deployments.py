@@ -1,7 +1,8 @@
+from src.exception.exception_handler import NameInvalid, DeploymentNotFound
 from src.mongo.establish_connection import DATABASE_URL
-from src.rdbms.create_tables import Deployment
 from src.mongo import crud_funcs
 from src.rdbms import use_db
+from typing import Any
 
 
 def create_deployment(db_name: str, username: str) -> str:
@@ -9,27 +10,30 @@ def create_deployment(db_name: str, username: str) -> str:
         crud_funcs.create_db(db_name)
         return use_db.create_deployment(username, db_name)
     else:
-        raise Exception
+        raise NameInvalid
 
 
-def get_deployment(deployment_id: str) -> Deployment:
-    return use_db.get_deployment(deployment_id)
+def get_deployment(deployment_id: str) -> dict[str, Any]:
+    try:
+        return use_db.get_deployment(deployment_id)
+    except DeploymentNotFound:
+        raise DeploymentNotFound
 
 
 def rename(deployment_id: str, new_name: str):
-    old_name = use_db.rename_deployment(deployment_id, new_name)
-    if old_name:
+    try:
+        old_name = use_db.rename_deployment(deployment_id, new_name)
         crud_funcs.rename_db(old_name, new_name)
-    else:
-        raise Exception
+    except DeploymentNotFound:
+        raise DeploymentNotFound
 
 
 def delete(deployment_id: str, username):
-    db_name = use_db.delete_deployment(deployment_id, username)
-    if db_name:
+    try:
+        db_name: str = use_db.delete_deployment(deployment_id, username)
         crud_funcs.delete_db(db_name)
-    else:
-        raise Exception
+    except DeploymentNotFound:
+        raise DeploymentNotFound
 
 
 def get_connection_string(deployment_id: str) -> str:

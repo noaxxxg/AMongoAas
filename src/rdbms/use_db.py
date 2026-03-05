@@ -2,6 +2,7 @@ import uuid
 import datetime
 from typing import Any
 from sqlalchemy import select
+from src.exception.exception_handler import DeploymentNotFound
 from src.rdbms.create_tables import Deployment, Status
 from src.rdbms.establish_connection import session
 
@@ -27,7 +28,7 @@ def get_deployment(db_id: str) -> dict[str, Any]:
         dep_dict["status"] = status.name
         return dep_dict
     else:
-        raise Exception
+        raise DeploymentNotFound
 
 
 def delete_deployment(db_id: str, username: str) -> str | None:
@@ -39,7 +40,7 @@ def delete_deployment(db_id: str, username: str) -> str | None:
             session.commit()
             return deployment.db_name
     else:
-        raise Exception
+        raise DeploymentNotFound
 
 
 def rename_deployment(db_id: str, name: str) -> str | None:
@@ -52,4 +53,4 @@ def rename_deployment(db_id: str, name: str) -> str | None:
             session.commit()
             return old_name
     else:
-        raise Exception
+        raise DeploymentNotFound
