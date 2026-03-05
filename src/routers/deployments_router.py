@@ -14,7 +14,7 @@ def create_deployment(db_name: Annotated[str, Body()], username: Annotated[str, 
 
 
 @router.get("/")
-def get_deployments(deployment_id: str) -> Deployment:
+def get_deployments(deployment_id: str):
     return deployments.get_deployment(deployment_id)
 
 

@@ -1,4 +1,4 @@
-from establish_connection import client
+from src.mongo.establish_connection import client
 
 
 def create_db(db_name: str):

@@ -1,7 +1,6 @@
-from create_tables import Base
+from src.rdbms.create_tables import Base, Status
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from create_tables import Status
 from sqlalchemy import select
 
 DATABASE_URL = "postgresql+psycopg2://postgres:postgres@localhost:5432/my_db"
@@ -12,7 +11,7 @@ SessionLocal = sessionmaker(bind=engine)
 
 session = SessionLocal()
 
-Base.metadata.create_all(engine)
+# Base.metadata.create_all(engine)
 
 
 def add_status():
