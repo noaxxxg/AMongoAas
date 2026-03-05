@@ -2,11 +2,9 @@ from src.mongo.establish_connection import DATABASE_URL
 from src.rdbms.create_tables import Deployment
 from src.mongo import crud_funcs
 from src.rdbms import use_db
-from typing import Annotated
-from fastapi import Body
 
 
-def create_deployment(db_name: Annotated[str, Body()], username: Annotated[str, Body()]) -> str:
+def create_deployment(db_name: str, username: str) -> str:
     if db_name.startswith(username) and len(username) >= 3:
         crud_funcs.create_db(db_name)
         return use_db.create_deployment(username, db_name)
