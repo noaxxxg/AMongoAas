@@ -14,20 +14,26 @@ def create_deployment(username: str, db_name: str) -> str:
     return str(db_id)
 
 
-def get_deployment(db_id: str):
-    stmt = select(Deployment).where(Deployment.id == db_id)
+def get_deployment(db_id: str) -> Deployment:
+    stmt = (select(Deployment).options(Deployment.id, Deployment.db_name, Deployment.status, Deployment.creation_time)
+            .where(Deployment.id == db_id))
     return session.scalars(stmt).one()
 
 
-def delete_deployment(db_id: str):
+def delete_deployment(db_id: str, username: str) -> str | None:
     stmt = select(Deployment).where(Deployment.id == db_id)
     deployment = session.scalars(stmt).one()
-    deployment.status = 2
-    session.commit()
+    if deployment.username == username:
+        deployment.status = 2
+        session.commit()
+        return deployment.db_name
 
 
-def rename_deployment(db_id: str, name: str):
+def rename_deployment(db_id: str, name: str) -> str | None:
     stmt = select(Deployment).where(Deployment.id == db_id)
-    deployment = session.scalars(stmt).one()
-    deployment.db_name = name
-    session.commit()
+    deployment: Deployment = session.scalars(stmt).one()
+    if name.startswith(deployment.username):
+        old_name = deployment.db_name
+        deployment.db_name = name
+        session.commit()
+        return old_name

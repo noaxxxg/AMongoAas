@@ -2,9 +2,12 @@ from establish_connection import client
 
 
 def create_db(db_name: str):
-    mydatabase = client[db_name]
-    collection = mydatabase["template"]
-    return collection
+    try:
+        mydatabase = client[db_name]
+        collection = mydatabase["template"]
+        collection.insert_one({"name": db_name})
+    except Exception:
+        raise Exception
 
 
 def delete_db(db_name: str):
