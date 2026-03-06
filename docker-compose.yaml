@@ -27,3 +27,10 @@ services:
       - postgres
     networks:
       - dem
+
+  web:
+      image: amongoas:1.0.1
+      ports:
+        - "8080:8080"
+      depends_on:
+        - postgres

@@ -60,6 +60,6 @@ def delete(deployment_id: str, username: Annotated[str, Header()],
 @router.get("/connection_string/")
 def get_connection_string(deployment_id: str, credentials: Annotated[HTTPBasicCredentials, Depends(security)]):
     if authenticate(credentials, deployment_id):
-        return deployments.get_connection_string(deployment_id)
+        return deployments.get_connection_string()
     else:
         raise AuthorizationError

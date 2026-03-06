@@ -19,7 +19,7 @@ def on_startup():
 
 
 @app.exception_handler(DeploymentNotFound)
-def unicorn_exception_handler(request: Request, exc: DeploymentNotFound):
+def unicorn_exception_handler(_: Request, exc: DeploymentNotFound):
     return JSONResponse(
         status_code=404,
         content={"error": f"{exc.message}"},
@@ -27,7 +27,7 @@ def unicorn_exception_handler(request: Request, exc: DeploymentNotFound):
 
 
 @app.exception_handler(MongoError)
-def unicorn_exception_handler(request: Request, exc: MongoError):
+def unicorn_exception_handler(_: Request, exc: MongoError):
     return JSONResponse(
         status_code= 503,
         content={"error": f"{exc.message}"},
@@ -35,7 +35,7 @@ def unicorn_exception_handler(request: Request, exc: MongoError):
 
 
 @app.exception_handler(NameInvalid)
-def unicorn_exception_handler(request: Request, exc: NameInvalid):
+def unicorn_exception_handler(_: Request, exc: NameInvalid):
     return JSONResponse(
         status_code=400,
         content={"error": f"{exc.message}"},
@@ -43,7 +43,7 @@ def unicorn_exception_handler(request: Request, exc: NameInvalid):
 
 
 @app.exception_handler(InvalidUsername)
-def unicorn_exception_handler(request: Request, exc: InvalidUsername):
+def unicorn_exception_handler(_: Request, exc: InvalidUsername):
     return JSONResponse(
         status_code=400,
         content={"error": f"{exc.message}"},
@@ -51,7 +51,7 @@ def unicorn_exception_handler(request: Request, exc: InvalidUsername):
 
 
 @app.exception_handler(AuthorizationError)
-def unicorn_exception_handler(request: Request, exc: AuthorizationError):
+def unicorn_exception_handler(_: Request, exc: AuthorizationError):
     return JSONResponse(
         status_code=401,
         content={"error": f"{exc.message}"},

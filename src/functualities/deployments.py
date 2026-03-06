@@ -7,7 +7,7 @@ from typing import Any
 
 def create_deployment(db_name: str, username: str) -> str:
     if db_name.startswith(username) and len(username) >= 3:
-        crud_funcs.create_db(db_name)
+        crud_funcs.create_db(db_name, username)
         return use_db.create_deployment(username, db_name)
     else:
         raise NameInvalid
@@ -36,5 +36,5 @@ def delete(deployment_id: str, username):
         raise DeploymentNotFound
 
 
-def get_connection_string(deployment_id: str) -> str:
+def get_connection_string() -> str:
     return MONGO_URL

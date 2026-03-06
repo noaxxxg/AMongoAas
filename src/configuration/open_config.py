@@ -7,7 +7,7 @@ def open_config(path):
         return content
 
 
-values = open_config("configuration\\config.json")
+values = open_config("C:\\Users\\Noago\\AMongoAas\\src\\configuration\\config.json")
 HOST = values["host"]
 PORT = values["port"]
 POSTGRES_URL = values["postgres_url"]
