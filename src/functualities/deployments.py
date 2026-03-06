@@ -1,5 +1,5 @@
 from src.exception.exception_handler import NameInvalid, DeploymentNotFound
-from src.mongo.establish_connection import DATABASE_URL
+from src.configuration.open_config import MONGO_URL
 from src.mongo import crud_funcs
 from src.rdbms import use_db
 from typing import Any
@@ -37,4 +37,4 @@ def delete(deployment_id: str, username):
 
 
 def get_connection_string(deployment_id: str) -> str:
-    return DATABASE_URL
+    return MONGO_URL

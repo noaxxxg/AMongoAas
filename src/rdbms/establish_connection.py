@@ -1,22 +1,38 @@
-from src.rdbms.create_tables import Base, Status
-from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy import select
+from sqlalchemy import create_engine, select
+from src.rdbms.create_tables import Base, Status
+from src.configuration.open_config import POSTGRES_URL
 
-DATABASE_URL = "postgresql+psycopg2://postgres:postgres@localhost:5432/my_db"
 
-engine = create_engine(DATABASE_URL, echo=True)
+engine = create_engine(POSTGRES_URL, echo=True)
 
 SessionLocal = sessionmaker(bind=engine)
 
-session = SessionLocal()
 
-Base.metadata.create_all(engine)
+def get_session():
+    return SessionLocal()
+
+
+def create_tables():
+    Base.metadata.create_all(engine)
 
 
 def add_status():
-    query = select(Status)
-    value = session.scalars(query)
-    session.add(Status(name="CREATED"))
-    session.add(Status(name="DELETED"))
-    session.commit()
+    session = get_session()
+    stmt = select(Status.name).where(
+        Status.name.in_(["CREATED", "DELETED"])
+    )
+    existing_statuses = session.scalars(stmt).all()
+    missing_statuses = []
+
+    if "CREATED" not in existing_statuses:
+        missing_statuses.append(Status(name="CREATED"))
+
+    if "DELETED" not in existing_statuses:
+        missing_statuses.append(Status(name="DELETED"))
+
+    if missing_statuses:
+        session.add_all(missing_statuses)
+        session.commit()
+
+    session.close()

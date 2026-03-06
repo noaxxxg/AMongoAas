@@ -1,0 +1,6 @@
+{
+  "port": 8080,
+  "host": "0.0.0.0",
+  "mongo_url": "mongodb://nraboy:password1234@localhost:27017",
+  "postgres_url": "postgresql+psycopg2://postgres:postgres@localhost:5432/my_db"
+}

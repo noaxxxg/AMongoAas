@@ -1,5 +1,7 @@
 from src.exception.exception_handler import (DeploymentNotFound, NameInvalid, MongoError, AuthorizationError,
                                              InvalidUsername)
+from src.rdbms.establish_connection import create_tables, add_status
+from src.configuration.open_config import HOST, PORT
 from src.routers.deployments_router import router
 from fastapi.responses import JSONResponse
 from fastapi import FastAPI, Request
@@ -8,6 +10,12 @@ import uvicorn
 
 app = FastAPI()
 app.include_router(router)
+
+
+@app.on_event("startup")
+def on_startup():
+    create_tables()
+    add_status()
 
 
 @app.exception_handler(DeploymentNotFound)
@@ -51,4 +59,4 @@ def unicorn_exception_handler(request: Request, exc: AuthorizationError):
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8080)
+    uvicorn.run(app, host=HOST, port=PORT)
