@@ -10,7 +10,19 @@ class NameInvalid(Exception):
         super().__init__(self.message)
 
 
-class MyCustomError(Exception):
-    def __init__(self, message):
-        self.message = message
+class InvalidUsername(Exception):
+    def __init__(self):
+        self.message = "error: user name doesnt match ths deployment"
+        super().__init__(self.message)
+
+
+class MongoError(Exception):
+    def __init__(self):
+        self.message = "an error occurred using mongodb"
+        super().__init__(self.message)
+
+
+class AuthorizationError(Exception):
+    def __init__(self):
+        self.message = "error: authorization failed"
         super().__init__(self.message)

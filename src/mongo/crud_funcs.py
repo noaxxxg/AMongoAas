@@ -1,3 +1,4 @@
+from src.exception.exception_handler import MongoError
 from src.mongo.establish_connection import client
 
 
@@ -7,7 +8,7 @@ def create_db(db_name: str):
         collection = mydatabase["template"]
         collection.insert_one({"name": db_name})
     except Exception:
-        raise Exception
+        raise MongoError
 
 
 def delete_db(db_name: str):

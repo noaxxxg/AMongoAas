@@ -2,9 +2,9 @@ import uuid
 import datetime
 from typing import Any
 from sqlalchemy import select
-from src.exception.exception_handler import DeploymentNotFound
-from src.rdbms.create_tables import Deployment, Status
 from src.rdbms.establish_connection import session
+from src.rdbms.create_tables import Deployment, Status
+from src.exception.exception_handler import DeploymentNotFound, InvalidUsername
 
 
 def create_deployment(username: str, db_name: str) -> str:
@@ -39,6 +39,8 @@ def delete_deployment(db_id: str, username: str) -> str | None:
             deployment.status = 2
             session.commit()
             return deployment.db_name
+        else:
+            raise InvalidUsername
     else:
         raise DeploymentNotFound
 
@@ -54,3 +56,8 @@ def rename_deployment(db_id: str, name: str) -> str | None:
             return old_name
     else:
         raise DeploymentNotFound
+
+
+def get_username(deployment_id: str) -> str | None:
+    stmt = select(Deployment.username).where(Deployment.id == deployment_id)
+    return session.scalars(stmt).first()
